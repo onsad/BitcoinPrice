@@ -1,4 +1,5 @@
 using BitcoinPrice.Models;
+using BitcoinPrice.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,7 +9,7 @@ namespace BitcoinPrice.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View(new LiveBitcoinPriceViewModel());
         }
 
         public IActionResult Privacy()
