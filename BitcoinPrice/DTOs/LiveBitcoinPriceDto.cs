@@ -6,8 +6,8 @@
 
         public decimal EurToCzkRate { get; set; }
 
-        public decimal PriceCzk { get; set; }
+        public decimal PriceCzk => PriceEur * EurToCzkRate;
 
-        public DateTime DownLoaded { get; set; }
+        public DateTime DownLoaded => DateTime.Now;
     }
 }

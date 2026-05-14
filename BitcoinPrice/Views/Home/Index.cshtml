@@ -1,65 +1,89 @@
-﻿@using BitcoinPrice.ViewModels
-@{
+﻿@{
     ViewData["Title"] = "Live Bitcoin Prices";
 }
-
-@model LiveBitcoinPriceViewModel
 
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Live Bitcoin Prices</h2>
-
-        <button class="btn btn-primary">
-            Refresh Data
-        </button>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Downloaded</th>
-                    <th>BTC/EUR</th>
-                    <th>EUR/CZK</th>
-                    <th>BTC/CZK</th>
-                </tr>
-            </thead>
+    <table id="liveTable" class="table table-striped table-hover align-middle">
 
-            <tbody>
-                @if (Model.LiveBitcoinPrices.Any())
-                {
-                    @foreach (var item in Model.LiveBitcoinPrices)
-                    {
-                        <tr>
-                            <td>
-                                @item.DownLoaded.ToString("dd.MM.yyyy HH:mm:ss")
-                            </td>
+        <thead>
+            <tr>
+                <th>Downloaded</th>
+                <th>BTC price in EUR</th>
+                <th>EUR to CZK rate</th>
+                <th>BTC price in CZK</th>
+            </tr>
+        </thead>
 
-                            <td>
-                                @item.PriceEur.ToString("N2")
-                            </td>
+        <tbody id="liveTableBody">
+        </tbody>
 
-                            <td>
-                                @item.EurToCzkRate.ToString("N4")
-                            </td>
-
-                            <td class="fw-bold">
-                                @item.PriceCzk.ToString("N2") Kč
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">
-                            No live data available.
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    </table>
 
 </div>
+
+<script>
+
+    const liveData = [];
+
+    async function loadData() {
+
+        const response = await fetch('/home/GetLiveBtcPrice');
+
+        const data = await response.json();
+
+        liveData.push(data);
+
+        appendRow(data);
+    }
+
+    function appendRow(item) {
+
+        const downloaded =
+        new Intl.DateTimeFormat('cs-CZ', {
+            dateStyle: 'short',
+            timeStyle: 'medium'
+        }).format(new Date(item.downLoaded));
+
+        const priceEur =
+            new Intl.NumberFormat('cs-CZ', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(item.priceEur);
+
+        const eurToCzk =
+            new Intl.NumberFormat('cs-CZ', {
+                minimumFractionDigits: 4,
+                maximumFractionDigits: 4
+            }).format(item.eurToCzkRate);
+
+        const priceCzk =
+            new Intl.NumberFormat('cs-CZ', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(item.priceCzk);
+
+        const tbody =
+            document.getElementById("liveTableBody");
+
+        tbody.innerHTML =
+            `
+            <tr>
+                <td>${downloaded}</td>
+                <td>${priceEur}</td>
+                <td>${eurToCzk}</td>
+                <td>${priceCzk}</td>
+            </tr>
+            `
+            + tbody.innerHTML;
+    }
+        
+    setInterval(loadData, 10000);
+
+    loadData();
+
+</script>

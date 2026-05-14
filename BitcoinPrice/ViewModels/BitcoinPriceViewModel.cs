@@ -2,7 +2,7 @@
 
 namespace BitcoinPrice.ViewModels
 {
-    public class LiveBitcoinPriceViewModel
+    public class BitcoinPriceViewModel
     {
         public List<LiveBitcoinPriceDto> LiveBitcoinPrices { get; set; } = new List<LiveBitcoinPriceDto>();
     }

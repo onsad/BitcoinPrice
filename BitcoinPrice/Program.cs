@@ -1,4 +1,5 @@
 using BitcoinPrice.AppDbContext;
+using BitcoinPrice.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BitcoinPriceDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<MarketDataApiOptions>(
+    builder.Configuration.GetSection("MarketDataApi"));
+
+builder.Services.AddHttpClient<IMarketDataService, MarketDataService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
