@@ -1,0 +1,96 @@
+﻿@using BitcoinPrice.DTOs
+@{
+    ViewData["Title"] = "Saved Bitcoin Prices";
+}
+
+@model List<SavedBitcoinPriceDto>
+
+<form asp-controller="BitcoinPrice"
+      asp-action="HandleTableAction"
+      method="post">
+
+    <table class="table table-striped table-hover align-middle">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>Downloaded</th>
+                <th>BTC price in EUR</th>
+                <th>EUR to CZK rate</th>
+                <th>BTC price in CZK</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+
+                    <td>
+                        <input type="checkbox"
+                               name="selectedIds"
+                               value="@Model[i].Id" />
+                    </td>
+
+                    <td>
+                        @Model[i].DownLoaded
+                    </td>
+
+                    <td>
+                        @Model[i].PriceEur.ToString("N2")
+                    </td>
+
+                    <td>
+                        @Model[i].EurToCzkRate.ToString("N4")
+                    </td>
+
+                    <td>
+                        @Model[i].PriceCzk.ToString("N2")
+                    </td>
+
+                    <td>
+
+                        <input asp-for="@Model[i].Note"
+                               class="form-control" />
+
+                        <input type="hidden"
+                               asp-for="@Model[i].Id" />
+
+                        <input type="hidden"
+                               asp-for="@Model[i].RowVersion" />
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="d-flex gap-2">
+
+        <button type="submit"
+                name="action"
+                value="save"
+                class="btn btn-primary">
+
+            Save Changes
+
+        </button>
+
+        <button type="submit"
+                name="action"
+                value="delete"
+                class="btn btn-danger"
+                onclick="return confirm('Delete selected records?')">
+
+            Delete Selected
+
+        </button>
+
+    </div>
+
+</form>

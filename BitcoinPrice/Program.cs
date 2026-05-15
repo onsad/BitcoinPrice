@@ -15,6 +15,7 @@ builder.Services.AddHttpClient<IMarketDataService, MarketDataService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(10);
 }).SetHandlerLifetime(TimeSpan.FromMinutes(5));
+builder.Services.AddScoped<IBitcoinPriceService, BitcoinPriceService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

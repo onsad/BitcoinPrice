@@ -32,7 +32,7 @@
 
     async function loadData() {
 
-        const response = await fetch('/home/GetLiveBtcPrice');
+        const response = await fetch('/api/liveBtcPrice');
 
         const data = await response.json();
 
