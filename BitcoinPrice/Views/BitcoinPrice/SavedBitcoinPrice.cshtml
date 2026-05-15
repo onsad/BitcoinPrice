@@ -55,6 +55,10 @@
                         <input asp-for="@Model[i].Note"
                                class="form-control" />
 
+                        <span asp-validation-for="@Model[i].Note"
+                              class="text-danger">
+                        </span>
+
                         <input type="hidden"
                                asp-for="@Model[i].Id" />
 

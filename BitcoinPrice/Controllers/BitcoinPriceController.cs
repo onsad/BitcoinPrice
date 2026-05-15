@@ -1,4 +1,5 @@
 ﻿using BitcoinPrice.DTOs;
+using BitcoinPrice.Helpers;
 using BitcoinPrice.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +11,7 @@ namespace BitcoinPrice.Controllers
         {
             var data = await bitcoinPriceService.GetBitcoinPriceRatesAsync();
 
-            var dataForView = data.Select(x => new SavedBitcoinPriceDto
-            {
-                Id = x.Id,
-                PriceEur = x.PriceInEur,
-                PriceCzk = x.PriceInEur * x.EurToCzkRate,
-                DownLoaded = x.DownloadedAt,
-                Note = x.Note,
-            }).ToList();
+            var dataForView = data.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList();
 
             return View(dataForView);
         }
@@ -51,6 +45,15 @@ namespace BitcoinPrice.Controllers
         {
             if (action == "save")
             {
+                if (!ModelState.IsValid)
+                {
+                    var data = await bitcoinPriceService.GetBitcoinPriceRatesAsync();
+
+                    var dataForView = data.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList();
+
+                    return View("SavedBitcoinPrice", dataForView);
+                }
+
                 var updates = model.Select(x =>
                     new UpdateLiveBitcoinPriceDto
                     {

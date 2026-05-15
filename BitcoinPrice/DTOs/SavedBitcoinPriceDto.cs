@@ -1,4 +1,6 @@
-﻿namespace BitcoinPrice.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BitcoinPrice.DTOs
 {
     public class SavedBitcoinPriceDto
     {
@@ -12,6 +14,7 @@
 
         public DateTime DownLoaded { get; set; }
 
+        [Required(ErrorMessage = "Note is required.")]
         public string? Note { get; set; }
 
         public byte[] RowVersion { get; set; } = [];

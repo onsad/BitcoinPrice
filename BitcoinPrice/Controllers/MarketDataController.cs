@@ -6,7 +6,7 @@ namespace BitcoinPrice.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class MarketDataController(IMarketDataService marketDataService) : ControllerBase
+    public class MarketDataController(IMarketDataService marketDataService, IBitcoinPriceService bitcoinPriceService) : ControllerBase
     {
         [HttpGet("liveBtcPrice")]
         public async Task<LiveBitcoinPriceDto> GetLiveBtcPrice()
@@ -19,6 +19,14 @@ namespace BitcoinPrice.Controllers
                 PriceEur = btcPrice,
                 EurToCzkRate = czkRate
             };
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save([FromBody] List<LiveBitcoinPriceDto> data)
+        {
+            await bitcoinPriceService.SaveBitcoinPriceRatesAsync(data);
+
+            return Ok();
         }
     }
 }
