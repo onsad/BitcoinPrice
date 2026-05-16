@@ -1,8 +1,24 @@
 using BitcoinPrice.AppDbContext;
 using BitcoinPrice.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Templates;
+using Serilog.Templates.Themes;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSerilog((services, lc) => lc
+        .ReadFrom.Configuration(builder.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(new ExpressionTemplate(
+            // Include trace and span ids when present.
+            "[{@t:HH:mm:ss} {@l:u3}{#if @tr is not null} ({substring(@tr,0,4)}:{substring(@sp,0,4)}){#end}] {@m}\n{@x}",
+            theme: TemplateTheme.Code)));
 
 builder.Services.AddDbContext<BitcoinPriceDbContext>(options =>
     options.UseSqlServer(
@@ -36,6 +52,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseRouting();
