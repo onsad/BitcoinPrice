@@ -29,3 +29,26 @@ Response
   "priceEur": 65342.15,
   "eurToCzkRate": 24.71
 }
+
+### Save Bitcoin Price Data
+
+Saves one or more Bitcoin price records into database.
+
+**Request**
+
+```http
+POST /api/save
+Content-Type: application/json
+
+Response
+
+[
+  {
+    "priceEur": 65342.15,
+    "eurToCzkRate": 24.71
+  },
+  {
+    "priceEur": 65410.22,
+    "eurToCzkRate": 24.68
+  }
+]
