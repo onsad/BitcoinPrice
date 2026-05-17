@@ -76,7 +76,7 @@ curl -X POST https://localhost:5001/BitcoinPrice/SaveChanges \
   -d "SavedBitcoinPrice[0].RowVersion=AAAAAAAAB9E="
 ```
 
-**Save Changes**
+**Delete Selected**
 
 ```
 curl -X POST https://localhost:5001/BitcoinPrice/DeleteSelected \
