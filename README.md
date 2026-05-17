@@ -54,3 +54,33 @@ Content-Type: application/json
   }
 ]
 ```
+
+### MVC Endpoints
+
+## Example cURL Requests
+
+**Get Saved Prices Page**   
+
+```
+curl -X GET http://localhost:5000/savedPrices
+```
+
+**Save Changes**   
+
+```
+curl -X POST https://localhost:5001/BitcoinPrice/SaveChanges \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "SavedBitcoinPrice[0].Id=1" \
+  -d "SavedBitcoinPrice[0].Selected=true" \
+  -d "SavedBitcoinPrice[0].Note=Updated note" \
+  -d "SavedBitcoinPrice[0].RowVersion=AAAAAAAAB9E="
+```
+
+**Save Changes**
+
+```
+curl -X POST https://localhost:5001/BitcoinPrice/DeleteSelected \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "SavedBitcoinPrice[0].Id=1" \
+  -d "SavedBitcoinPrice[0].Selected=true"
+  ```
