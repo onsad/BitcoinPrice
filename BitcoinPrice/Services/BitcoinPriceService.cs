@@ -13,9 +13,7 @@ namespace BitcoinPrice.Services
             {
                 logger.LogInformation($"Deleting {ids.Count} bitcoin price rates.");
 
-                var entities = await bitcoinPriceDbContext.BitcoinRates
-                    .Where(x => ids.Contains(x.Id))
-                    .ToListAsync();
+                var entities = await bitcoinPriceDbContext.BitcoinRates.Where(x => ids.Contains(x.Id)).ToListAsync();
 
                 bitcoinPriceDbContext.BitcoinRates.RemoveRange(entities);
 
@@ -37,9 +35,7 @@ namespace BitcoinPrice.Services
             {
                 logger.LogInformation("Loading saved bitcoin price rates.");
 
-                return await bitcoinPriceDbContext.BitcoinRates
-                    .OrderByDescending(x => x.DownloadedAt)
-                    .ToListAsync();
+                return await bitcoinPriceDbContext.BitcoinRates.OrderByDescending(x => x.DownloadedAt).ToListAsync();
             }
             catch (Exception ex)
             {

@@ -1,22 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BitcoinPrice.DTOs
 {
-    public class SavedBitcoinPriceDto
+    public class SavedBitcoinPriceDto : IValidatableObject
     {
         public int Id { get; set; }
 
-        public decimal PriceEur { get; set; }
+        public bool Selected { get; set; }
 
+        [DisplayName("Price in EUR")]
+        public decimal PriceEur { get; set; }
+        
+        [DisplayName("EUR to CZK Rate")]
         public decimal EurToCzkRate { get; set; }
 
+        [DisplayName("Price in CZK")]
         public decimal PriceCzk { get; set; }
 
+        [DisplayName("Downloaded At")]
         public DateTime DownLoaded { get; set; }
 
-        [Required(ErrorMessage = "Note is required.")]
+        [DisplayName("Note")]
         public string? Note { get; set; }
 
         public byte[] RowVersion { get; set; } = [];
+
+        public IEnumerable<ValidationResult> Validate(
+        ValidationContext validationContext)
+        {
+            if (Selected && string.IsNullOrWhiteSpace(Note))
+            {
+                yield return new ValidationResult("Note is required for selected records.",[nameof(Note)]);
+            }
+        }
     }
 }

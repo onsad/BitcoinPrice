@@ -41,7 +41,7 @@
 <script>
 
     const liveData = [];
-
+    
     async function loadData() {
 
         const response = await fetch('/api/liveBtcPrice');
@@ -79,26 +79,26 @@
                 maximumFractionDigits: 2
             }).format(item.priceCzk);
 
-        const tbody =
-            document.getElementById("liveTableBody");
+        const tbody = document.getElementById("liveTableBody");
 
         const index = liveData.length - 1;
 
-        tbody.innerHTML =
-            `
-            <tr>
-                <td>
+        tbody.insertAdjacentHTML(
+        'afterbegin',
+        `
+        <tr>
+            <td>
                 <input type="checkbox"
                        class="row-checkbox"
                        data-index="${index}" />
-                </td>
-                <td>${downloaded}</td>
-                <td>${priceEur}</td>
-                <td>${eurToCzk}</td>
-                <td>${priceCzk}</td>
-            </tr>
-            `
-            + tbody.innerHTML;
+            </td>
+            <td>${downloaded}</td>
+            <td>${priceEur}</td>
+            <td>${eurToCzk}</td>
+            <td>${priceCzk}</td>
+        </tr>
+        `
+    );
     }
 
     document.getElementById("saveBtn")
@@ -139,7 +139,7 @@
             alert("Failed to save data.");
         }
     });
-        
+    
     setInterval(loadData, 10000);
 
     loadData();

@@ -1,6 +1,7 @@
 ﻿using BitcoinPrice.DTOs;
 using BitcoinPrice.Helpers;
 using BitcoinPrice.Services;
+using BitcoinPrice.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BitcoinPrice.Controllers
@@ -13,65 +14,54 @@ namespace BitcoinPrice.Controllers
 
             var dataForView = data.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList();
 
-            return View(dataForView);
-        }
+            var model = new BitcoinPriceViewModel
+            {
+                SavedBitcoinPrice = dataForView
+            };
 
-        [HttpPost("save")]
-        public async Task<IActionResult> Save([FromBody] List<LiveBitcoinPriceDto> data)
-        {
-            await bitcoinPriceService.SaveBitcoinPriceRatesAsync(data);
-
-            return Ok();
-        }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] List<UpdateLiveBitcoinPriceDto> data)
-        {
-            await bitcoinPriceService.UpdateBitcoinPriceRatesAsync(data);
-
-            return Ok();
-        }
-
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromBody] List<int> ids)
-        {
-            await bitcoinPriceService.DeleteBitcoinPriceRatesAsync(ids);
-
-            return Ok();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> HandleTableAction(string action, List<SavedBitcoinPriceDto> model, List<int> selectedIds)
+        public async Task<IActionResult> SaveChanges(BitcoinPriceViewModel model)
         {
-            if (action == "save")
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    var data = await bitcoinPriceService.GetBitcoinPriceRatesAsync();
+                TempData["Error"] = "Please fill notes for selected records.";
 
-                    var dataForView = data.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList();
+                var refreshedData = await bitcoinPriceService.GetBitcoinPriceRatesAsync();
 
-                    return View("SavedBitcoinPrice", dataForView);
-                }
-
-                var updates = model.Select(x =>
-                    new UpdateLiveBitcoinPriceDto
+                return View("SavedBitcoinPrice",
+                    new BitcoinPriceViewModel
                     {
-                        Id = x.Id,
-                        Note = x.Note ?? "",
-                        RowVersion = x.RowVersion
-                    })
-                    .ToList();
-
-                await bitcoinPriceService.UpdateBitcoinPriceRatesAsync(updates);
+                        SavedBitcoinPrice = refreshedData.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList()
+                    });
             }
 
-            if (action == "delete")
-            {
-                await bitcoinPriceService.DeleteBitcoinPriceRatesAsync(selectedIds);
-            }
+            var updates = model.SavedBitcoinPrice
+                .Where(x => x.Selected)
+                .Select(x => new UpdateLiveBitcoinPriceDto
+                {
+                    Id = x.Id,
+                    Note = x.Note ?? "",
+                    RowVersion = x.RowVersion
+                })
+                .ToList();
+
+            await bitcoinPriceService.UpdateBitcoinPriceRatesAsync(updates);
 
             return RedirectToAction(nameof(SavedBitcoinPrice));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSelected(BitcoinPriceViewModel model)
+        {
+            var ids = model.SavedBitcoinPrice.Where(x => x.Selected).Select(x => x.Id).ToList();
+
+            await bitcoinPriceService.DeleteBitcoinPriceRatesAsync(ids);
+
+            return RedirectToAction(nameof(SavedBitcoinPrice));
+        }
+
     }
 }

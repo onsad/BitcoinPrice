@@ -1,4 +1,5 @@
 using BitcoinPrice.AppDbContext;
+using BitcoinPrice.MiddleWare;
 using BitcoinPrice.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -54,6 +55,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
+app.UseGlobalExceptionHandling();
 
 app.UseHttpsRedirection();
 app.UseRouting();
