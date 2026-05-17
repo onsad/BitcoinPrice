@@ -105,17 +105,21 @@
         <div class="d-flex gap-2 mt-3">
 
             <button type="submit"
+                    id="saveButton"
                     formaction="@Url.Action("SaveChanges", "BitcoinPrice")"
-                    class="btn btn-primary">
+                    class="btn btn-primary"
+                    disabled>
 
                 Save Selected
 
             </button>
 
             <button type="submit"
+                    id="deleteButton"
                     formaction="@Url.Action("DeleteSelected", "BitcoinPrice")"
                     class="btn btn-danger"
-                    onclick="return confirm('Delete selected records?')">
+                    onclick="return confirm('Delete selected records?')"
+                    disabled>
 
                 Delete Selected
 
@@ -125,3 +129,35 @@
     }
 
 </div>
+
+@section Scripts
+{
+    <script>
+        function toggleButtons() {
+
+            const checkboxes = document.querySelectorAll(
+                '#savedTable input[type="checkbox"]'
+            );
+
+            const anyChecked = Array.from(checkboxes)
+                .some(x => x.checked);
+
+            document.getElementById('saveButton').disabled = !anyChecked;
+
+            document.getElementById('deleteButton').disabled = !anyChecked;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const checkboxes = document.querySelectorAll(
+                '#savedTable input[type="checkbox"]'
+            );
+
+            checkboxes.forEach(x => {
+                x.addEventListener('change', toggleButtons);
+            });
+
+            toggleButtons();
+        });
+    </script>
+}
