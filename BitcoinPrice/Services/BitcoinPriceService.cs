@@ -21,6 +21,12 @@ namespace BitcoinPrice.Services
 
                 logger.LogInformation("Bitcoin price rates deleted successfully.");
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                logger.LogWarning(ex, $"Concurrency conflict while deleting BitcoinPriceRate with Ids {string.Join(", ", ids)}");
+
+                throw;
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Failed to delete bitcoin price rates.");
@@ -65,6 +71,12 @@ namespace BitcoinPrice.Services
 
                 logger.LogInformation("Bitcoin price rates saved successfully.");
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                logger.LogWarning(ex, $"Concurrency conflict while saving BitcoinPriceRate.");
+
+                throw;
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Failed to save bitcoin price rates.");
@@ -93,6 +105,12 @@ namespace BitcoinPrice.Services
                 await bitcoinPriceDbContext.SaveChangesAsync();
 
                 logger.LogInformation("Bitcoin price rates updated successfully.");
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                logger.LogWarning(ex, $"Concurrency conflict while updating BitcoinPriceRate with Ids {string.Join(", ", rates.Select(r => r.Id))}");
+
+                throw;
             }
             catch (Exception ex)
             {

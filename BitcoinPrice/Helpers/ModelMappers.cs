@@ -14,7 +14,8 @@ namespace BitcoinPrice.Helpers
                 EurToCzkRate = entity.EurToCzkRate,
                 PriceCzk = entity.PriceCzk,
                 DownLoaded = entity.DownloadedAt,
-                Note = entity.Note
+                Note = entity.Note,
+                RowVersion = entity.Version
             };
         }
     }

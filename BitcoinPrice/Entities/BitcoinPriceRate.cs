@@ -1,4 +1,6 @@
-﻿namespace BitcoinPrice.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BitcoinPrice.Entities
 {
     public class BitcoinPriceRate
     {
@@ -13,5 +15,8 @@
         public DateTime DownloadedAt { get; set; }
 
         public string? Note { get; set; }
+
+        [Timestamp]
+        public byte[] Version { get; set; } = default!;
     }
 }
