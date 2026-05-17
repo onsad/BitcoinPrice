@@ -10,12 +10,15 @@ namespace BitcoinPrice.DTOs
         public bool Selected { get; set; }
 
         [DisplayName("Price in EUR")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal PriceEur { get; set; }
         
         [DisplayName("EUR to CZK Rate")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal EurToCzkRate { get; set; }
 
         [DisplayName("Price in CZK")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal PriceCzk { get; set; }
 
         [DisplayName("Downloaded At")]

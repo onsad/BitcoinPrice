@@ -35,13 +35,29 @@ namespace BitcoinPrice.Services
             }
         }
 
-        public async Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync()
+        public async Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync(string? sortOrder)
         {
+            IQueryable<BitcoinPriceRate> query = bitcoinPriceDbContext.BitcoinRates;
+
+            query = sortOrder switch
+            {
+                "downloaded_desc" => query.OrderByDescending(x => x.DownloadedAt),
+
+                "priceeur" => query.OrderBy(x => x.PriceInEur),
+
+                "priceeur_desc" => query.OrderByDescending(x => x.PriceInEur),
+
+                "priceczk" => query.OrderBy(x => x.PriceCzk),
+
+                "priceczk_desc" => query.OrderByDescending(x => x.PriceCzk),
+
+                _ => query.OrderBy(x => x.DownloadedAt)
+            };
             try
             {
                 logger.LogInformation("Loading saved bitcoin price rates.");
 
-                return await bitcoinPriceDbContext.BitcoinRates.OrderByDescending(x => x.DownloadedAt).ToListAsync();
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {

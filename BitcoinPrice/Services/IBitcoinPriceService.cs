@@ -5,7 +5,7 @@ namespace BitcoinPrice.Services
 {
     public interface IBitcoinPriceService
     {
-        Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync();
+        Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync(string? sortOrder);
         Task SaveBitcoinPriceRatesAsync(List<LiveBitcoinPriceDto> rates);
         Task DeleteBitcoinPriceRatesAsync(List<int> ids);
         Task UpdateBitcoinPriceRatesAsync(List<UpdateLiveBitcoinPriceDto> rates);

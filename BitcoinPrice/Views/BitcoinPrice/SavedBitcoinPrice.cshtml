@@ -28,11 +28,21 @@
             <thead class="table-dark">
                 <tr>
                     <th></th>
-                    <th><a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().DownLoaded)</a></th>
-                    <th>BTC price in EUR</th>
-                    <th>EUR to CZK rate</th>
-                    <th>BTC price in CZK</th>
-                    <th>Note</th>
+                    <th><a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice"
+                        asp-route-sortOrder="@ViewData["DownloadedSortParm"]">@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().DownLoaded)</a>
+                    </th>
+                    <th>
+                        <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice"
+                           asp-route-sortOrder="@ViewData["PriceEurSortParm"]">@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().PriceEur)
+                        </a>
+                    </th>
+                    <th>@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().EurToCzkRate)</th>
+                    <th>
+                        <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice" asp-route-sortOrder="@ViewData["PriceCzkSortParm"]">
+                            @Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().PriceCzk)
+                        </a>
+                    </th>
+                    <th>@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().Note)</th>
                 </tr>
             </thead>
 

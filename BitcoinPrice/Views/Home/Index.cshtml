@@ -41,16 +41,28 @@
 <script>
 
     const liveData = [];
-    
-    async function loadData() {
+        async function loadData() {
 
-        const response = await fetch('/api/liveBtcPrice');
+        try {
+            const response = await fetch('/api/liveBtcPrice');
 
-        const data = await response.json();
+            if (!response.ok) {
 
-        liveData.push(data);
+                window.location.href = '/Home/Error';
 
-        appendRow(data);
+                return;
+            }
+
+            const data = await response.json();
+
+            liveData.push(data);
+
+            appendRow(data);
+        }
+        catch (error) {
+
+            window.location.href = '/Home/Error';
+        }
     }
 
     function appendRow(item) {
