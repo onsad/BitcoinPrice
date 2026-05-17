@@ -22,12 +22,14 @@ Returns current Bitcoin price in EUR together with EUR/CZK exchange rate.
 
 GET /api/liveBtcPrice
 
-Response
+**Response**
 
+```
 {
   "priceEur": 65342.15,
   "eurToCzkRate": 24.71
 }
+```
 
 ### Save Bitcoin Price Data
 
@@ -38,8 +40,9 @@ Saves one or more Bitcoin price records into database.
 POST /api/save
 Content-Type: application/json
 
-Response
+**Response**
 
+```
 [
   {
     "priceEur": 65342.15,
@@ -50,3 +53,4 @@ Response
     "eurToCzkRate": 24.68
   }
 ]
+```
