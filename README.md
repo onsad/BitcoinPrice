@@ -20,7 +20,6 @@ Returns current Bitcoin price in EUR together with EUR/CZK exchange rate.
 
 **Request**
 
-```http
 GET /api/liveBtcPrice
 
 Response
