@@ -37,7 +37,7 @@ Saves one or more Bitcoin price records into database.
 
 **Request**
 
-POST /api/save
+POST /api/save  
 Content-Type: application/json
 
 **Response**
