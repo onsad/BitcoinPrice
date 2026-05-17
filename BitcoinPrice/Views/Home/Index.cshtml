@@ -41,7 +41,16 @@
 <script>
 
     const liveData = [];
+    let isLoading = false;
+
+
         async function loadData() {
+
+        if (isLoading) {
+            return;
+        }   
+
+        isLoading = true;
 
         try {
             const response = await fetch('/api/liveBtcPrice');
@@ -62,6 +71,9 @@
         catch (error) {
 
             window.location.href = '/Home/Error';
+        }
+        finally {
+        isLoading = false;
         }
     }
 
@@ -151,9 +163,17 @@
             alert("Failed to save data.");
         }
     });
-    
-    setInterval(loadData, 10000);
 
-    loadData();
+        async function startPolling() {
+
+        while (true) {
+
+            await loadData();
+
+            await new Promise(r => setTimeout(r, 5000));
+        }
+    }
+
+    startPolling();
 
 </script>
