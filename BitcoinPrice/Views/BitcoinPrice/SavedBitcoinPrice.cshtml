@@ -25,24 +25,112 @@
     {
         <table id="savedTable"class="table table-striped table-hover align-middle">
 
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th></th>
                     <th><a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice"
-                        asp-route-sortOrder="@ViewData["DownloadedSortParm"]">@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().DownLoaded)</a>
+                        asp-route-sortOrder="@ViewData["DownloadedSortParm"]"
+                           asp-route-priceEur="@ViewBag.PriceEur"
+                           asp-route-eurToCzkRate="@ViewBag.EurToCzkRate"
+                           asp-route-priceCzk="@ViewBag.PriceCzk"
+                           asp-route-downloaded="@ViewBag.Downloaded"
+                           asp-route-note="@ViewBag.Note">
+                            @Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().DownLoaded)
+                        </a>
                     </th>
                     <th>
                         <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice"
-                           asp-route-sortOrder="@ViewData["PriceEurSortParm"]">@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().PriceEur)
+                           asp-route-sortOrder="@ViewData["PriceEurSortParm"]"
+                           asp-route-priceEur="@ViewBag.PriceEur"
+                           asp-route-eurToCzkRate="@ViewBag.EurToCzkRate"
+                           asp-route-priceCzk="@ViewBag.PriceCzk"
+                           asp-route-downloaded="@ViewBag.Downloaded"
+                           asp-route-note="@ViewBag.Note">
+                            @Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().PriceEur)
                         </a>
                     </th>
-                    <th>@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().EurToCzkRate)</th>
                     <th>
-                        <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice" asp-route-sortOrder="@ViewData["PriceCzkSortParm"]">
+                        <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice"
+                           asp-route-sortOrder="@ViewData["EurToCzkRateParm"]"
+                           asp-route-priceEur="@ViewBag.PriceEur"
+                           asp-route-eurToCzkRate="@ViewBag.EurToCzkRate"
+                           asp-route-priceCzk="@ViewBag.PriceCzk"
+                           asp-route-downloaded="@ViewBag.Downloaded"
+                           asp-route-note="@ViewBag.Note">
+                            @Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().EurToCzkRate)
+                        </a>
+                    <th>
+                        <a asp-controller="BitcoinPrice" asp-action="SavedBitcoinPrice" asp-route-sortOrder="@ViewData["PriceCzkSortParm"]"
+                           asp-route-priceEur="@ViewBag.PriceEur"
+                           asp-route-eurToCzkRate="@ViewBag.EurToCzkRate"
+                           asp-route-priceCzk="@ViewBag.PriceCzk"
+                           asp-route-downloaded="@ViewBag.Downloaded"
+                           asp-route-note="@ViewBag.Note">
                             @Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().PriceCzk)
                         </a>
                     </th>
                     <th>@Html.DisplayNameFor(model => model.SavedBitcoinPrice.First().Note)</th>
+                </tr>
+
+                <tr>
+
+                    <th></th>
+
+                    <th>
+                        <input type="date"
+                               name="downloaded"
+                               value="@ViewBag.Downloaded"
+                               class="form-control form-control-sm" />
+                    </th>
+
+                    <th>
+                        <input type="number"
+                               step="0.01"
+                               name="priceEur"
+                               value="@ViewBag.PriceEur"
+                               class="form-control form-control-sm"
+                               placeholder="EUR" />
+                    </th>
+
+                    <th>
+                        <input type="number"
+                               step="0.01"
+                               name="eurToCzkRate"
+                               value="@ViewBag.EurToCzkRate"
+                               class="form-control form-control-sm"
+                               placeholder="CZK" />
+                    </th>
+
+                    <th>
+                        <input type="number"
+                               step="0.01"
+                               name="priceCzk"
+                               value="@ViewBag.PriceCzk"
+                               class="form-control form-control-sm"
+                               placeholder="CZK" />
+                    </th>
+
+                    <th>
+                        <div class="d-flex gap-1">
+
+                            <input type="text"
+                                   name="note"
+                                   value="@ViewBag.Note"
+                                   class="form-control form-control-sm"
+                                   placeholder="Search note..." />
+
+                            <button type="submit"
+                                    formaction="@Url.Action("SavedBitcoinPrice", "BitcoinPrice")"
+                                    formmethod="get"
+                                    class="btn btn-sm btn-light">
+
+                                Filter
+
+                            </button>
+
+                        </div>
+                    </th>
+
                 </tr>
             </thead>
 

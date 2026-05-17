@@ -35,9 +35,34 @@ namespace BitcoinPrice.Services
             }
         }
 
-        public async Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync(string? sortOrder)
+        public async Task<List<BitcoinPriceRate>> GetBitcoinPriceRatesAsync(string? sortOrder, decimal? priceEur, decimal? eurToCzkRate, decimal? priceCzk, DateTime? downloaded, string? note)
         {
             IQueryable<BitcoinPriceRate> query = bitcoinPriceDbContext.BitcoinRates;
+
+            if (priceEur.HasValue)
+            {
+                query = query.Where(x => x.PriceInEur == priceEur.Value);
+            }
+
+            if (eurToCzkRate.HasValue)
+            {
+                query = query.Where(x => x.EurToCzkRate == eurToCzkRate.Value);
+            }
+
+            if (priceCzk.HasValue)
+            {
+                query = query.Where(x => x.PriceCzk == priceCzk.Value);
+            }
+
+            if (downloaded.HasValue)
+            {
+                query = query.Where(x => x.DownloadedAt >= downloaded.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(note))
+            {
+                query = query.Where(x => x.Note != null && x.Note.Contains(note));
+            }
 
             query = sortOrder switch
             {
@@ -46,6 +71,10 @@ namespace BitcoinPrice.Services
                 "priceeur" => query.OrderBy(x => x.PriceInEur),
 
                 "priceeur_desc" => query.OrderByDescending(x => x.PriceInEur),
+
+                "eurtoczkrate" => query.OrderBy(x => x.EurToCzkRate),
+
+                "eurtoczkrate_desc" => query.OrderByDescending(x => x.EurToCzkRate),
 
                 "priceczk" => query.OrderBy(x => x.PriceCzk),
 

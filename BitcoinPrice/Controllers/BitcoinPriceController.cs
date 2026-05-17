@@ -8,15 +8,23 @@ namespace BitcoinPrice.Controllers
 {
     public class BitcoinPriceController(IBitcoinPriceService bitcoinPriceService) : Controller
     {
-        public async Task<ActionResult<List<SavedBitcoinPriceDto>>> SavedBitcoinPrice(string? sortOrder)
+        public async Task<ActionResult<List<SavedBitcoinPriceDto>>> SavedBitcoinPrice(string? sortOrder, decimal? priceEur, decimal? eurToCzkRate, decimal? priceCzk, DateTime? downloaded, string? note)
         {
+            ViewBag.PriceEur = priceEur;
+            ViewBag.EurToCzkRate = eurToCzkRate;
+            ViewBag.PriceCzk = priceCzk;
+            ViewBag.Downloaded = downloaded?.ToString("yyyy-MM-dd");
+            ViewBag.Note = note;
+
             ViewData["DownloadedSortParm"] = string.IsNullOrEmpty(sortOrder) ? "downloaded_desc" : "";
 
             ViewData["PriceEurSortParm"] = sortOrder == "priceeur" ? "priceeur_desc" : "priceeur";
 
+            ViewData["EurToCzkRateParm"] = sortOrder == "eurtoczkrate" ? "eurtoczkrate_desc" : "eurtoczkrate";
+
             ViewData["PriceCzkSortParm"] = sortOrder == "priceczk" ? "priceczk_desc" : "priceczk";
 
-            var data = await bitcoinPriceService.GetBitcoinPriceRatesAsync(sortOrder);
+            var data = await bitcoinPriceService.GetBitcoinPriceRatesAsync(sortOrder, priceEur, eurToCzkRate, priceCzk, downloaded, note);
 
             var dataForView = data.Select(ModelMappers.MapBitcoinPriceRateEntityToDto).ToList();
 
@@ -35,7 +43,7 @@ namespace BitcoinPrice.Controllers
             {
                 TempData["Error"] = "Please fill notes for selected records.";
 
-                var refreshedData = await bitcoinPriceService.GetBitcoinPriceRatesAsync(null);
+                var refreshedData = await bitcoinPriceService.GetBitcoinPriceRatesAsync(null, null, null, null, null, null);
 
                 return View("SavedBitcoinPrice",
                     new BitcoinPriceViewModel
